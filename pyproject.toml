@@ -166,17 +166,17 @@ select = [
     "D",  # docstrings
 ]
 ignore = [
-    "E501", # We have way too many "line too long" errors at the moment
-    # TODO: Address these with time
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D105",
-    "D107",
-    "D401",
-    "D402",
-    "D417",
+    "E501", # temp We have way too many "line too long" errors at the moment
+    "D100", # temp Address these with time (https://docs.astral.sh/ruff/rules/undocumented-public-module/)
+    "D101", # temp Address these with time (https://docs.astral.sh/ruff/rules/undocumented-public-class/)
+    "D102", # temp Address these with time (https://docs.astral.sh/ruff/rules/undocumented-public-method/)
+    "D103", # temp Address these with time (https://docs.astral.sh/ruff/rules/undocumented-public-function/)
+    "D105", # temp Address these with time (https://docs.astral.sh/ruff/rules/undocumented-magic-method/)
+    "D107", # temp Address these with time (https://docs.astral.sh/ruff/rules/undocumented-public-init/)
+    "D401", # temp Address these with time (https://docs.astral.sh/ruff/rules/non-imperative-mood/)
+    "D402", # temp Address these with time (https://docs.astral.sh/ruff/rules/no-signature/)
+    "D417", # temp Address these with time (https://docs.astral.sh/ruff/rules/undocumented-param/)
+
 ]
 
 # Allow unused variables when underscore-prefixed.
