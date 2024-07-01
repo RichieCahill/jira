@@ -1088,10 +1088,8 @@ class JIRA:
         else:
             attachment_io = attachment
             if isinstance(attachment, BufferedReader) and attachment.mode != "rb":
-                self.log.warning(
-                    "%s was not opened in 'rb' mode, attaching file may fail."
-                    % attachment.name
-                )
+                msg = f"{attachment.name} was not opened in 'rb' mode, attaching file may fail."
+                self.log.warning(msg)
 
         fname = filename
         if not fname and isinstance(attachment_io, BufferedReader):
@@ -4215,10 +4213,8 @@ class JIRA:
         elif kerberos_options.get("mutual_authentication") == "DISABLED":
             mutual_authentication = DISABLED
         else:
-            raise ValueError(
-                "Unknown value for mutual_authentication: %s"
-                % kerberos_options["mutual_authentication"]
-            )
+            error = f"Unknown value for mutual_authentication: {kerberos_options["mutual_authentication"]}"
+            raise ValueError(error)
 
         self._session.auth = HTTPKerberosAuth(
             mutual_authentication=mutual_authentication

@@ -334,10 +334,8 @@ class Resource:
                 "The reporter specified is not a user." in error_list
                 and "reporter" not in data["fields"]
             ):
-                logging.warning(
-                    "autofix: setting reporter to '%s' and retrying the update."
-                    % self._options["autofix"]
-                )
+                msg = f"autofix: setting reporter to '{self._options["autofix"]}' and retrying the update."
+                logging.warning(msg)
                 data["fields"]["reporter"] = {"name": self._options["autofix"]}
 
             if (
@@ -384,10 +382,8 @@ class Resource:
                         raise NotImplementedError()
 
             if user and jira:
-                logging.warning(
-                    "Trying to add missing orphan user '%s' in order to complete the previous failed operation."
-                    % user
-                )
+                msg = f"Trying to add missing orphan user '{user}' in order to complete the previous failed operation."
+                logging.warning(msg)
                 jira.add_user(user, "noreply@example.com", 10100, active=False)
                 # if 'assignee' not in data['fields']:
                 #    logging.warning("autofix: setting assignee to '%s' and retrying the update." % self._options['autofix'])
