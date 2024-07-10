@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import calendar
 import copy
-import datetime
 import hashlib
 import json
 import logging as _logging
@@ -23,7 +22,7 @@ import urllib
 import warnings
 from collections import OrderedDict
 from collections.abc import Iterable
-from datetime import timezone
+from datetime import datetime, timedelta, timezone
 from functools import lru_cache, wraps
 from io import BufferedReader
 from numbers import Number
@@ -2792,7 +2791,7 @@ class JIRA:
         newEstimate: str | None = None,
         reduceBy: str | None = None,
         comment: str | None = None,
-        started: datetime.datetime | None = None,
+        started: datetime | None = None,
         user: str | None = None,
         visibility: dict[str, Any] | None = None,
     ) -> Worklog:
@@ -2807,7 +2806,7 @@ class JIRA:
             newEstimate (Optional[str]): the new value for the remaining estimate field. e.g. "2d"
             reduceBy (Optional[str]): the amount to reduce the remaining estimate by e.g. "2d"
             comment (Optional[str]): optional worklog comment
-            started (Optional[datetime.datetime]): Moment when the work is logged, if not specified will default to now
+            started (Optional[datetime]): Moment when the work is logged, if not specified will default to now
             user (Optional[str]): the user ID or name to use for this worklog
             visibility (Optional[Dict[str,Any]]): Details about any restrictions in the visibility of the worklog.
               Optional when creating or updating a worklog. ::
@@ -4250,11 +4249,11 @@ class JIRA:
         self._session.verify = ssl_cert
 
     @staticmethod
-    def _timestamp(dt: datetime.timedelta = None):
-        t = datetime.datetime.now(timezone.utc)
-        if dt is not None:
-            t += dt
-        return calendar.timegm(t.timetuple())
+    def _timestamp(time_delta: timedelta | None = None):
+        current_time = datetime.now(timezone.utc)
+        if time_delta is not None:
+            current_time += time_delta
+        return calendar.timegm(current_time.timetuple())
 
     def _create_jwt_session(self, jwt: dict[str, Any]):
         try:
@@ -4265,9 +4264,7 @@ class JIRA:
         jwt_auth.set_header_format("JWT %s")
 
         jwt_auth.add_field("iat", lambda req: JIRA._timestamp())
-        jwt_auth.add_field(
-            "exp", lambda req: JIRA._timestamp(datetime.timedelta(minutes=3))
-        )
+        jwt_auth.add_field("exp", lambda req: JIRA._timestamp(timedelta(minutes=3)))
         jwt_auth.add_field("qsh", QshGenerator(self._options["context_path"]))
         for f in jwt["payload"].items():
             jwt_auth.add_field(f[0], f[1])
