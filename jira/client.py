@@ -23,6 +23,7 @@ import urllib
 import warnings
 from collections import OrderedDict
 from collections.abc import Iterable
+from datetime import timezone
 from functools import lru_cache, wraps
 from io import BufferedReader
 from numbers import Number
@@ -4250,7 +4251,7 @@ class JIRA:
 
     @staticmethod
     def _timestamp(dt: datetime.timedelta = None):
-        t = datetime.datetime.utcnow()
+        t = datetime.datetime.now(timezone.utc)
         if dt is not None:
             t += dt
         return calendar.timegm(t.timetuple())
